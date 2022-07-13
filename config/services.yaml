@@ -12,7 +12,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Adapter\UserAdapterInterface: '@App\Adapter\DatabaseUserAdapter'
+    App\Adapter\UserAdapterInterface: '@App\Adapter\JsonUserAdapter'
 
 # Make an alias for both adapters, so they are available even when not used at all in the application.
 # https://github.com/symfony/symfony/issues/28528
