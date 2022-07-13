@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: Test task for a PHP software developer job
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: users
+    description: user operations
+paths:
+  /api/v1/users:
+    get:
+      tags:
+        - users
+      summary: Get a list of all users
+      operationId: getUsers
+      responses:
+        200:
+          description: A list of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+                    firstName:
+                      type: string
+                      example: John
+                    lastName:
+                      type: string
+                      example: Doe
+                    email:
+                      type: string
+                      example: john.doe@example.com
+                    created:
+                      type: string
+                      example: 2022-01-01 13:37:00
+                    updated:
+                      type: string
+                      nullable: true
+                      example: null
+
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        description: User object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  format: email
+                  example: john.doe@example.com
+                password:
+                  type: string
+                  example: Password123
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+      responses:
+        201:
+          description: The newly created user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: john.doe@example.com
+                  created:
+                    type: string
+                    example: 2022-01-01 13:37:00
+                  updated:
+                    type: string
+                    nullable: true
+                    example: null
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Failure
+                  message:
+                    type: string
+                    example: Errors occurred during request validation.
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        errorMessage:
+                          type: string
+                          example: A user with email address 'john.doe@example.com' already exists.
+
+  /api/v1/users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get a specific user
+      parameters:
+        - name: id
+          in: path
+          description: The user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+      operationId: getUser
+      responses:
+        200:
+          description: A user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  email:
+                    type: string
+                    format: email
+                    example: john.doe@example.com
+                  created:
+                    type: string
+                    example: 2022-01-01 13:37:00
+                  updated:
+                    type: string
+                    nullable: true
+                    example: null
+        404:
+          description: The user was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Failure
+                  message:
+                    type: string
+                    example: A user with id '133831a8-c7e3-4891-9e7e-1e4c33ce111d' could not be found.
+
+    put:
+      tags:
+        - users
+      summary: Update a specific user
+      parameters:
+        - name: id
+          in: path
+          description: The user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+      operationId: updateUser
+      requestBody:
+        description: User object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: Max
+                lastName:
+                  type: string
+                  example: Mustermann
+                email:
+                  type: string
+                  format: email
+                  example: max.mustermann@example.com
+                password:
+                  type: string
+                  example: BieneMaja123
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+      responses:
+        200:
+          description: The updated user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+                  firstName:
+                    type: string
+                    example: Max
+                  lastName:
+                    type: string
+                    example: Mustermann
+                  email:
+                    type: string
+                    format: email
+                    example: max.mustermann@example.com
+                  created:
+                    type: string
+                    example: 2022-01-01 13:37:00
+                  updated:
+                    type: string
+                    nullable: true
+                    example: 2022-02-30 25:61:61
+        404:
+          description: The user was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Failure
+                  message:
+                    type: string
+                    example: A user with id '133831a8-c7e3-4891-9e7e-1e4c33ce111d' could not be found.
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Failure
+                  message:
+                    type: string
+                    example: Errors occurred during request validation.
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        errorMessage:
+                          type: string
+                          example: A user with email address 'max.mustermann@example.com' already exists.
+    delete:
+      tags:
+        - users
+      summary: Delete a specific user
+      parameters:
+        - name: id
+          in: path
+          description: The user id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 133731a8-c7e3-4891-9e7e-1e4c33ce111d
+      operationId: deleteUser
+      responses:
+        200:
+          description: The user was successful deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Success
+                  message:
+                    type: string
+                    example: The user with id '133731a8-c7e3-4891-9e7e-1e4c33ce111d' was successfully deleted.
+        404:
+          description: The user was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Failure
+                  message:
+                    type: string
+                    example: A user with id '133831a8-c7e3-4891-9e7e-1e4c33ce111d' could not be found.

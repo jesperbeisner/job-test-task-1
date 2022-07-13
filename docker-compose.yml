@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+    web:
+        image: caddy:2.5.1-alpine
+        volumes:
+            - .:/var/www/html
+            - ./docker/caddy:/etc/caddy
+        ports:
+            - '8080:80'
+
+    php:
+        build: ./docker/php
+        volumes:
+            - .:/var/www/html

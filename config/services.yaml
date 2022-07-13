@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $usersJsonFile: '%env(resolve:USERS_JSON_FILE)%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Adapter\UserAdapterInterface: '@App\Adapter\DatabaseUserAdapter'
+
+# Make an alias for both adapters, so they are available even when not used at all in the application.
+# https://github.com/symfony/symfony/issues/28528
+when@test:
+    services:
+        App\Adapter\UserAdapterInterface:
+            public: true
+
+        test.App\Adapter\JsonUserAdapter:
+            alias: 'App\Adapter\JsonUserAdapter'
+            public: true
+
+        test.App\Adapter\DatabaseUserAdapter:
+            alias: 'App\Adapter\DatabaseUserAdapter'
+            public: true
